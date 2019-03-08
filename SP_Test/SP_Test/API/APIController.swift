@@ -13,10 +13,9 @@ class APIController: NSObject {
     
     static let shared = APIController()
     
-    // https://johnny-appleseed.clientsecure.me/client-portal-api/cpt-codes?Accept=application/vnd.api+json&filter[clinicianId]=2
-    let baseUrl = "https://johnny-appleseed.clientsecure.me"
+    let baseUrl = "https://johnny-appleseed.clientsecure.me/client-portal-api"
     
-    // https://johnny-appleseed.clientsecure.me/client-portal-api/offices?Accept=application/vnd.api+json&filter[clinicianId]=2&filter[cptCodeId]=3866
+    // ex: https://johnny-appleseed.clientsecure.me/client-portal-api/offices?Accept=application/vnd.api+json&filter[clinicianId]=2&filter[cptCodeId]=3866
     
     let headers: HTTPHeaders = [
         "Accept": "application/vnd.api+json",

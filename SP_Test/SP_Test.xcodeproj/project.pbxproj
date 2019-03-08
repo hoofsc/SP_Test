@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C7B7D2F22330A5500C9F764 /* APIRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D2E22330A5500C9F764 /* APIRoute.swift */; };
 		7CCED4BA222DE3D900642DFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4B9222DE3D900642DFB /* AppDelegate.swift */; };
 		7CCED4BF222DE3D900642DFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CCED4BD222DE3D900642DFB /* Main.storyboard */; };
 		7CCED4C2222DE3D900642DFB /* SP_Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4C0222DE3D900642DFB /* SP_Test.xcdatamodeld */; };
@@ -53,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7C7B7D2E22330A5500C9F764 /* APIRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRoute.swift; sourceTree = "<group>"; };
 		7CCED4B6222DE3D900642DFB /* SP_Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP_Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCED4B9222DE3D900642DFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CCED4BE222DE3D900642DFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				7CCED4F8222DF9BE00642DFB /* APIController.swift */,
+				7C7B7D2E22330A5500C9F764 /* APIRoute.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCED543222E19DB00642DFB /* JapxCodable.swift in Sources */,
+				7C7B7D2F22330A5500C9F764 /* APIRoute.swift in Sources */,
 				7CCED4FB222DFA3300642DFB /* ServiceCode.swift in Sources */,
 				7CCED555222E264E00642DFB /* OfficesCollectionViewController.swift in Sources */,
 				7CCED54D222E1E9300642DFB /* OfficesService.swift in Sources */,

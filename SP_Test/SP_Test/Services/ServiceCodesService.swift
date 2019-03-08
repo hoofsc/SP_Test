@@ -14,7 +14,7 @@ class ServiceCodesService: NSObject {
     static let shared = ServiceCodesService()
     
     func urlString() -> String {
-        return "https://johnny-appleseed.clientsecure.me/client-portal-api/cpt-codes"
+        return APIController.shared.baseUrl + APIRoute.serviceCodes.rawValue
     }
     
     func getServiceCodes(clinicianId: Int, completion: @escaping (([ServiceCode]?) -> Void), failure: @escaping ((Error) -> Void)) {
