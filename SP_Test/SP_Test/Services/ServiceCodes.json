@@ -1,0 +1,78 @@
+{
+"data": [
+{
+"id": "6",
+"type": "cptCodes",
+"attributes": {
+"description": "Group Therapy",
+"duration": 50,
+"rate": "300.0",
+"callToBook": "false"
+}
+},
+{
+"id": "3866",
+"type": "cptCodes",
+"attributes": {
+"description": "Psychiatric Diagnostic Evaluation",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+},
+{
+"id": "3871",
+"type": "cptCodes",
+"attributes": {
+"description": "Psychotherapy for Crisis, 60 min",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+},
+{
+"id": "52969",
+"type": "cptCodes",
+"attributes": {
+"description": "Developmental Testing, Extended",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+},
+{
+"id": "52974",
+"type": "cptCodes",
+"attributes": {
+"description": "Reassessment",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+},
+{
+"id": "52975",
+"type": "cptCodes",
+"attributes": {
+"description": "Health & Behavior Intervention - Individual",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+},
+{
+"id": "52976",
+"type": "cptCodes",
+"attributes": {
+"description": "Health & Behavior Intervention - Family with Patient",
+"duration": 50,
+"rate": "100.0",
+"callToBook": "false"
+}
+}
+],
+"links": {
+"first": "https://johnny-appleseed.clientsecure.me/client-portal-api/cpt-codes?page%5Bnumber%5D=1&page%5Bsize%5D=10",
+"last": "https://johnny-appleseed.clientsecure.me/client-portal-api/cpt-codes?page%5Bnumber%5D=1&page%5Bsize%5D=10"
+}
+}

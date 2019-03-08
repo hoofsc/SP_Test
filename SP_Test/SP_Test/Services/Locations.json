@@ -1,0 +1,48 @@
+
+{
+    "data": [
+        {
+            "id": "1",
+            "type": "offices",
+            "attributes": {
+                "city": "Port Alyssonbury",
+                "name": "Main Office",
+                "state": "NV",
+                "street": "Elise Drive",
+                "zip": "51859",
+                "phone": "(626) 298-1956",
+                "isVideo": false
+            }
+        },
+        {
+            "id": "63968",
+            "type": "offices",
+            "attributes": {
+                "city": "Los Angeles",
+                "name": "Therapy Center",
+                "state": "CA",
+                "street": "801 S Hope Street",
+                "zip": "90017",
+                "phone": "(626) 298-1956",
+                "isVideo": false
+            }
+        },
+        {
+            "id": "3781352",
+            "type": "offices",
+            "attributes": {
+                "city": "Santa Monica",
+                "name": "Downtown Office",
+                "state": "CA",
+                "street": "510 Arizona Ave",
+                "zip": "90401",
+                "phone": "(626) 298-1956",
+                "isVideo": false
+            }
+        }
+    ],
+    "links": {
+        "first": "https://johnny-appleseed.clientsecure.me/client-portal-api/offices?page%5Bnumber%5D=1&page%5Bsize%5D=10",
+        "last": "https://johnny-appleseed.clientsecure.me/client-portal-api/offices?page%5Bnumber%5D=1&page%5Bsize%5D=10"
+    }
+}
