@@ -13,14 +13,15 @@ class ServiceCodesService: NSObject {
     
     static let shared = ServiceCodesService()
     
-    func urlString() -> String {
-        return APIController.shared.baseUrl + APIRoute.serviceCodes.rawValue
+    var urlString: String {
+        get {
+            return APIController.shared.baseUrl + APIRoute.serviceCodes.rawValue
+        }
     }
     
     func getServiceCodes(clinicianId: Int, completion: @escaping (([ServiceCode]?) -> Void), failure: @escaping ((Error) -> Void)) {
         
-        let urlStr = urlString()
-        guard let url = URL(string: urlStr) else {
+        guard let url = URL(string: urlString) else {
             completion(nil)
             return
         }

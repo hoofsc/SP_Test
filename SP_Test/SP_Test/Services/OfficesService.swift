@@ -14,14 +14,15 @@ class OfficesService: NSObject {
     
     static let shared = OfficesService()
     
-    func urlString() -> String {
-        return APIController.shared.baseUrl + APIRoute.offices.rawValue
+    var urlString: String {
+        get {
+            return APIController.shared.baseUrl + APIRoute.offices.rawValue
+        }
     }
     
     func getOffices(clinicianId: Int, serviceCodeId: Int, completion: @escaping (([Office]?) -> Void), failure: @escaping ((Error) -> Void)) {
         
-        let urlStr = urlString()
-        guard let url = URL(string: urlStr) else {
+        guard let url = URL(string: urlString) else {
             completion(nil)
             return
         }
