@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import CoreData
 
 class ServiceCodesService: NSObject {
     
@@ -30,7 +31,12 @@ class ServiceCodesService: NSObject {
             "filter[clinicianId]": clinicianId
         ]
         
+        let managedObjectContext = CoreDataController.shared.persistentContainer.viewContext
         let decoder = JSONDecoder()
+        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext") else {
+            fatalError()
+        }
+        decoder.userInfo[kCodingUserInfoKeyManagedObjectContext] = managedObjectContext
         decoder.dateDecodingStrategy = .secondsSince1970
         let japxDecoder = JapxDecoder(jsonDecoder: decoder)
         
@@ -42,6 +48,7 @@ class ServiceCodesService: NSObject {
                 
                  if response.result.isSuccess {
                     if let serviceCodes = response.result.value {
+                        try! managedObjectContext.save()
                         completion(serviceCodes)
                     }
                 }

@@ -22,13 +22,19 @@ class OfficeCollectionViewCell: UICollectionViewCell {
     
     var office: Office? {
         didSet {
-            guard office != nil else {
+            guard office != nil,
+                let name = office?.name,
+                let street = office?.street,
+                let city = office?.city,
+                let state = office?.state,
+                let zip = office?.zip,
+                let phone = office?.phone else {
                 return
             }
-            nameLabel.text = office!.name
-            streetLabel.text = office!.street
-            cityStateZipLabel.text = "\(office!.city), \(office!.state) \(office!.zip)"
-            phoneLabel.text = office!.phone
+            nameLabel.text = name
+            streetLabel.text = street
+            cityStateZipLabel.text = "\(city), \(state) \(zip)"
+            phoneLabel.text = phone
             
             if let geoLocation = office!.geoLocation {
                 let coordinate = geoLocation.location.coordinate

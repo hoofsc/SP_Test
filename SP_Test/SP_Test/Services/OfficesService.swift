@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import CoreData
 import CoreLocation
 
 class OfficesService: NSObject {
@@ -32,7 +33,12 @@ class OfficesService: NSObject {
             "filter[cptCodeId]": serviceCodeId
         ]
         
+        let managedObjectContext = CoreDataController.shared.persistentContainer.viewContext
         let decoder = JSONDecoder()
+        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext") else {
+            fatalError()
+        }
+        decoder.userInfo[kCodingUserInfoKeyManagedObjectContext] = managedObjectContext
         decoder.dateDecodingStrategy = .secondsSince1970
         let japxDecoder = JapxDecoder(jsonDecoder: decoder)
         
@@ -47,11 +53,19 @@ class OfficesService: NSObject {
                     if var offices = response.result.value {
                         var officeCount = offices.count
                         for i in 0..<offices.count {
-                            let addressStr = "\(offices[i].street) \(offices[i].city) \(offices[i].state) \(offices[i].zip)"
+                            guard let street = offices[i].street,
+                                let city = offices[i].city,
+                                let state = offices[i].state,
+                                let zip = offices[i].zip else {
+                                completionCount += 1
+                                return
+                            }
+                            let addressStr = "\(street) \(city) \(state) \(zip)"
                             let geocoder = CLGeocoder()
                             geocoder.geocodeAddressString(addressStr, completionHandler: { (placemarks, error) in
                                 defer {
                                     if completionCount == officeCount {
+                                        try! managedObjectContext.save()
                                         completion(offices)
                                     }
                                 }

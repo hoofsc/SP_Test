@@ -31,7 +31,7 @@ class OfficesCollectionViewController: UICollectionViewController {
         guard clinicianId != nil, serviceCode != nil else {
             return
         }
-        self.navigationItem.prompt = serviceCode!.description
+        self.navigationItem.prompt = serviceCode!.desc
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = UICollectionViewFlowLayout.automaticSize
@@ -45,7 +45,7 @@ class OfficesCollectionViewController: UICollectionViewController {
         collectionView.collectionViewLayout = layout
         collectionView.collectionViewLayout.invalidateLayout()
         
-        OfficesService.shared.getOffices(clinicianId: clinicianId!, serviceCodeId: Int(serviceCode!.id)!, completion: { offices in
+        OfficesService.shared.getOffices(clinicianId: clinicianId!, serviceCodeId: Int(serviceCode!.oid!)!, completion: { offices in
             self.offices = offices!
         }) { error in
             print("error: \(String(describing: error))")

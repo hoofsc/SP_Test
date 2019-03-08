@@ -15,7 +15,7 @@ class ServiceCodeTableViewCell: UITableViewCell {
     
     var serviceCode: ServiceCode? {
         didSet {
-            descriptionLabel.text = serviceCode?.description
+            descriptionLabel.text = serviceCode?.desc
             durationLabel.text = "\(serviceCode?.duration ?? 0) minutes"
         }
     }

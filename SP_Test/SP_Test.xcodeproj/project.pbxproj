@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		7C7B7D2F22330A5500C9F764 /* APIRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D2E22330A5500C9F764 /* APIRoute.swift */; };
+		7C7B7D3222330E5000C9F764 /* EntityName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D3122330E5000C9F764 /* EntityName.swift */; };
+		7C7B7D35223311DD00C9F764 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D34223311DD00C9F764 /* CoreDataController.swift */; };
+		7C7B7D372233126800C9F764 /* CodingUserInfoKey+NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D362233126800C9F764 /* CodingUserInfoKey+NSManagedObjectContext.swift */; };
+		7C7B7D4F22331F8200C9F764 /* Office+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D4B22331F8200C9F764 /* Office+CoreDataClass.swift */; };
+		7C7B7D55223320B100C9F764 /* ServiceCode+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7B7D53223320B100C9F764 /* ServiceCode+CoreDataClass.swift */; };
 		7CCED4BA222DE3D900642DFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4B9222DE3D900642DFB /* AppDelegate.swift */; };
 		7CCED4BF222DE3D900642DFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CCED4BD222DE3D900642DFB /* Main.storyboard */; };
 		7CCED4C2222DE3D900642DFB /* SP_Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4C0222DE3D900642DFB /* SP_Test.xcdatamodeld */; };
@@ -19,14 +24,12 @@
 		7CCED4EF222DE4D200642DFB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CCED4EE222DE4D200642DFB /* Alamofire.framework */; };
 		7CCED4F7222DF96500642DFB /* ServiceCodesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4F6222DF96500642DFB /* ServiceCodesService.swift */; };
 		7CCED4F9222DF9BE00642DFB /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4F8222DF9BE00642DFB /* APIController.swift */; };
-		7CCED4FB222DFA3300642DFB /* ServiceCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED4FA222DFA3300642DFB /* ServiceCode.swift */; };
 		7CCED4FD222E05D100642DFB /* ServiceCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CCED4FC222E05D100642DFB /* ServiceCodes.json */; };
 		7CCED4FF222E05F500642DFB /* Locations.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CCED4FE222E05F500642DFB /* Locations.json */; };
 		7CCED541222E19DB00642DFB /* JapxAlamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED52E222E19DB00642DFB /* JapxAlamofire.swift */; };
 		7CCED542222E19DB00642DFB /* Japx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED530222E19DB00642DFB /* Japx.swift */; };
 		7CCED543222E19DB00642DFB /* JapxCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED532222E19DB00642DFB /* JapxCodable.swift */; };
 		7CCED545222E19DB00642DFB /* JapxCodableAlamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED535222E19DB00642DFB /* JapxCodableAlamofire.swift */; };
-		7CCED54B222E1D4500642DFB /* Office.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED54A222E1D4500642DFB /* Office.swift */; };
 		7CCED54D222E1E9300642DFB /* OfficesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED54C222E1E9300642DFB /* OfficesService.swift */; };
 		7CCED550222E214900642DFB /* CLLocation+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED54F222E214900642DFB /* CLLocation+Encodable.swift */; };
 		7CCED553222E22B100642DFB /* GeoLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCED552222E22B100642DFB /* GeoLocation.swift */; };
@@ -55,6 +58,11 @@
 
 /* Begin PBXFileReference section */
 		7C7B7D2E22330A5500C9F764 /* APIRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRoute.swift; sourceTree = "<group>"; };
+		7C7B7D3122330E5000C9F764 /* EntityName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityName.swift; sourceTree = "<group>"; };
+		7C7B7D34223311DD00C9F764 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
+		7C7B7D362233126800C9F764 /* CodingUserInfoKey+NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+NSManagedObjectContext.swift"; sourceTree = "<group>"; };
+		7C7B7D4B22331F8200C9F764 /* Office+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Office+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7C7B7D53223320B100C9F764 /* ServiceCode+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceCode+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7CCED4B6222DE3D900642DFB /* SP_Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP_Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCED4B9222DE3D900642DFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CCED4BE222DE3D900642DFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -72,14 +80,12 @@
 		7CCED4EE222DE4D200642DFB /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
 		7CCED4F6222DF96500642DFB /* ServiceCodesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCodesService.swift; sourceTree = "<group>"; };
 		7CCED4F8222DF9BE00642DFB /* APIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
-		7CCED4FA222DFA3300642DFB /* ServiceCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCode.swift; sourceTree = "<group>"; };
 		7CCED4FC222E05D100642DFB /* ServiceCodes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ServiceCodes.json; sourceTree = "<group>"; };
 		7CCED4FE222E05F500642DFB /* Locations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Locations.json; sourceTree = "<group>"; };
 		7CCED52E222E19DB00642DFB /* JapxAlamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JapxAlamofire.swift; sourceTree = "<group>"; };
 		7CCED530222E19DB00642DFB /* Japx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Japx.swift; sourceTree = "<group>"; };
 		7CCED532222E19DB00642DFB /* JapxCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JapxCodable.swift; sourceTree = "<group>"; };
 		7CCED535222E19DB00642DFB /* JapxCodableAlamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JapxCodableAlamofire.swift; sourceTree = "<group>"; };
-		7CCED54A222E1D4500642DFB /* Office.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Office.swift; sourceTree = "<group>"; };
 		7CCED54C222E1E9300642DFB /* OfficesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficesService.swift; sourceTree = "<group>"; };
 		7CCED54F222E214900642DFB /* CLLocation+Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Encodable.swift"; sourceTree = "<group>"; };
 		7CCED552222E22B100642DFB /* GeoLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocation.swift; sourceTree = "<group>"; };
@@ -115,6 +121,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C7B7D3022330E2D00C9F764 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				7C7B7D3122330E5000C9F764 /* EntityName.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		7C7B7D33223311CE00C9F764 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7C7B7D34223311DD00C9F764 /* CoreDataController.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		7CCED4AD222DE3D900642DFB = {
 			isa = PBXGroup;
 			children = (
@@ -140,8 +162,10 @@
 			isa = PBXGroup;
 			children = (
 				7CCED4F5222DE55900642DFB /* API */,
+				7C7B7D33223311CE00C9F764 /* CoreData */,
 				7CCED54E222E213000642DFB /* Extensions */,
 				7CCED551222E22A500642DFB /* Helpers */,
+				7C7B7D3022330E2D00C9F764 /* Enums */,
 				7CCED4F3222DE54800642DFB /* Services */,
 				7CCED4F2222DE54300642DFB /* ViewControllers */,
 				7CCED4F1222DE53E00642DFB /* Views */,
@@ -187,8 +211,8 @@
 		7CCED4F0222DE53800642DFB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7CCED4FA222DFA3300642DFB /* ServiceCode.swift */,
-				7CCED54A222E1D4500642DFB /* Office.swift */,
+				7C7B7D53223320B100C9F764 /* ServiceCode+CoreDataClass.swift */,
+				7C7B7D4B22331F8200C9F764 /* Office+CoreDataClass.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -286,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				7CCED54F222E214900642DFB /* CLLocation+Encodable.swift */,
+				7C7B7D362233126800C9F764 /* CodingUserInfoKey+NSManagedObjectContext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -455,19 +480,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C7B7D3222330E5000C9F764 /* EntityName.swift in Sources */,
+				7C7B7D4F22331F8200C9F764 /* Office+CoreDataClass.swift in Sources */,
 				7CCED543222E19DB00642DFB /* JapxCodable.swift in Sources */,
+				7C7B7D35223311DD00C9F764 /* CoreDataController.swift in Sources */,
 				7C7B7D2F22330A5500C9F764 /* APIRoute.swift in Sources */,
-				7CCED4FB222DFA3300642DFB /* ServiceCode.swift in Sources */,
 				7CCED555222E264E00642DFB /* OfficesCollectionViewController.swift in Sources */,
 				7CCED54D222E1E9300642DFB /* OfficesService.swift in Sources */,
 				7CCED553222E22B100642DFB /* GeoLocation.swift in Sources */,
 				7CCED542222E19DB00642DFB /* Japx.swift in Sources */,
 				7CCED541222E19DB00642DFB /* JapxAlamofire.swift in Sources */,
 				7CCED545222E19DB00642DFB /* JapxCodableAlamofire.swift in Sources */,
-				7CCED54B222E1D4500642DFB /* Office.swift in Sources */,
+				7C7B7D55223320B100C9F764 /* ServiceCode+CoreDataClass.swift in Sources */,
 				7CCED4F7222DF96500642DFB /* ServiceCodesService.swift in Sources */,
 				7CCED4BA222DE3D900642DFB /* AppDelegate.swift in Sources */,
 				7CCED557222E26FD00642DFB /* OfficeCollectionViewCell.swift in Sources */,
+				7C7B7D372233126800C9F764 /* CodingUserInfoKey+NSManagedObjectContext.swift in Sources */,
 				7CCED4C2222DE3D900642DFB /* SP_Test.xcdatamodeld in Sources */,
 				7CCED55B222E3BE600642DFB /* ServiceCodesTableViewController.swift in Sources */,
 				7CCED55F222E3E5300642DFB /* ServiceCodeTableViewCell.swift in Sources */,
