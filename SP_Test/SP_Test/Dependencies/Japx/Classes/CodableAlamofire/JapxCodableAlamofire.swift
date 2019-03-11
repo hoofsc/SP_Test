@@ -8,6 +8,7 @@
 import Alamofire
 import Foundation
 
+
 extension Request {
     
     /// Returns a parsed and decoded JSON:API object into requested type contained in result type.

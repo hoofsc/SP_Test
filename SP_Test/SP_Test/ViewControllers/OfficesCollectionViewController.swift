@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 private let reuseIdentifier = "OfficeCollectionViewCell"
 
-class OfficesCollectionViewController: UICollectionViewController {
-
+class OfficesCollectionViewController: UICollectionViewController, FetchedResultsControllerProtocol {
+    
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
+    var blockOperations: [BlockOperation]? = []
+    
     let kItemsPerRow: CGFloat = 2
     let kItemSpacing: CGFloat = 20.0
     let kEstimatedWidth: CGFloat = 140.0
@@ -19,11 +23,6 @@ class OfficesCollectionViewController: UICollectionViewController {
     
     var clinicianId: Int?
     var serviceCode: ServiceCode?
-    var offices = [Office]() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +44,26 @@ class OfficesCollectionViewController: UICollectionViewController {
         collectionView.collectionViewLayout = layout
         collectionView.collectionViewLayout.invalidateLayout()
         
-        OfficesService.shared.getOffices(clinicianId: clinicianId!, serviceCodeId: Int(serviceCode!.oid!)!, completion: { offices in
-            self.offices = offices!
-        }) { error in
+        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.office.rawValue)
+        let sortDescriptor = NSSortDescriptor(key: "oid", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = NSPredicate(format: "serviceCodes.oid CONTAINS %@", serviceCode?.oid ?? "")
+        
+        let context = CoreDataController.shared.persistentContainer.viewContext
+        fetchedResultsController = NSFetchedResultsController<NSFetchRequestResult>(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch let error {
+            print("FETCH ERROR: \(error)")
+        }
+        
+        
+        fetchData()
+    }
+    
+    func fetchData() {
+        OfficesService.shared.getOffices(clinicianId: clinicianId!, serviceCodeId: Int(serviceCode!.oid!)!, completion: nil) { error in
             print("error: \(String(describing: error))")
         }
     }
@@ -72,16 +88,67 @@ class OfficesCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return offices.count
+        guard let sections = fetchedResultsController?.sections else {
+            return 0
+        }
+        /*get number of rows count for each section*/
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! OfficeCollectionViewCell
     
         // Configure the cell
-        cell.office = offices[indexPath.row]
+        cell.office = fetchedResultsController?.object(at: indexPath) as? Office
     
         return cell
     }
 
+}
+
+extension OfficesCollectionViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        blockOperations?.removeAll(keepingCapacity: false)
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        let op: BlockOperation
+        switch (type) {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { return }
+            op = BlockOperation() {
+                self.collectionView.insertItems(at: [newIndexPath])
+            }
+        case .delete:
+            guard let indexPath = indexPath else { return }
+            op = BlockOperation() {
+                self.collectionView.deleteItems(at: [indexPath])
+            }
+        case .move:
+            guard let indexPath = indexPath, let newIndexPath = newIndexPath else { return }
+            op = BlockOperation() {
+                self.collectionView.moveItem(at: indexPath, to: newIndexPath)
+            }
+        case .update:
+            guard let indexPath = indexPath else { return }
+            op = BlockOperation() {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+        blockOperations?.append(op)
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard blockOperations != nil else { return }
+        collectionView?.performBatchUpdates({
+            self.blockOperations!.forEach({ op in
+                    op.start()
+            })
+        }, completion: { (finished) in
+            self.blockOperations?.removeAll(keepingCapacity: false)
+        })
+    }
+    
 }

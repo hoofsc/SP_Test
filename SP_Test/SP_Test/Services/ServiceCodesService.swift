@@ -20,10 +20,10 @@ class ServiceCodesService: NSObject {
         }
     }
     
-    func getServiceCodes(clinicianId: Int, completion: @escaping (([ServiceCode]?) -> Void), failure: @escaping ((Error) -> Void)) {
+    func getServiceCodes(clinicianId: Int, completion: (([ServiceCode]?) -> Void)?, failure: @escaping ((Error) -> Void)) {
         
         guard let url = URL(string: urlString) else {
-            completion(nil)
+            completion?(nil)
             return
         }
         
@@ -31,30 +31,41 @@ class ServiceCodesService: NSObject {
             "filter[clinicianId]": clinicianId
         ]
         
-        let managedObjectContext = CoreDataController.shared.persistentContainer.viewContext
+        let managedObjectContext = CoreDataController.shared.persistentContainer.newBackgroundContext()
         let decoder = JSONDecoder()
-        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext") else {
+        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext"),
+            let kCodingUserInfoKeyClinicianId = CodingUserInfoKey(rawValue: "clinicianId") else {
             fatalError()
         }
+        decoder.userInfo[kCodingUserInfoKeyClinicianId] = clinicianId
         decoder.userInfo[kCodingUserInfoKeyManagedObjectContext] = managedObjectContext
         decoder.dateDecodingStrategy = .secondsSince1970
         let japxDecoder = JapxDecoder(jsonDecoder: decoder)
         
+        let queue = DispatchQueue(label: EntityName.serviceCode.rawValue)
         Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding(destination: .queryString), headers: APIController.shared.headers)
             .validate()
-            .responseCodableJSONAPI(queue: nil, includeList: nil, keyPath: "data", decoder: japxDecoder) { (response: DataResponse<[ServiceCode]>) in
+            .responseCodableJSONAPI(queue: queue, includeList: nil, keyPath: "data", decoder: japxDecoder) { (response: DataResponse<[ServiceCode]>) in
                 
-                debugPrint(response)
+//                debugPrint(response)
                 
                  if response.result.isSuccess {
                     if let serviceCodes = response.result.value {
-                        try! managedObjectContext.save()
-                        completion(serviceCodes)
+                        CoreDataController.shared.save(context: managedObjectContext)
+                        DispatchQueue.main.async {
+                            completion?(serviceCodes)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion?(nil)
+                        }
                     }
                 }
                 if response.result.isFailure {
                     let error : Error = response.result.error!
-                    failure(error)
+                    DispatchQueue.main.async {
+                        failure(error)
+                    }
                 }
         }
         

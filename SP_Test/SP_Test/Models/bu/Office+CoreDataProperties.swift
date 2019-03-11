@@ -2,7 +2,7 @@
 //  Office+CoreDataProperties.swift
 //  SP_Test
 //
-//  Created by Hoof on 3/10/19.
+//  Created by Hoof on 3/8/19.
 //  Copyright © 2019 Retinal Media. All rights reserved.
 //
 //
@@ -17,17 +17,15 @@ extension Office {
         return NSFetchRequest<Office>(entityName: "Office")
     }
 
-    @NSManaged public var city: String?
-    @NSManaged public var isVideo: Bool
-    @NSManaged public var name: String?
     @NSManaged public var oid: String?
-    @NSManaged public var phone: String?
-    @NSManaged public var state: String?
-    @NSManaged public var street: String?
     @NSManaged public var type: String?
+    @NSManaged public var name: String?
+    @NSManaged public var street: String?
+    @NSManaged public var city: String?
+    @NSManaged public var state: String?
     @NSManaged public var zip: String?
-    @NSManaged public var geolocation: GeoLocation?
-    @NSManaged public var formattedAddress: String?
+    @NSManaged public var phone: String?
+    @NSManaged public var isVideo: Bool
     @NSManaged public var services: NSSet?
 
 }

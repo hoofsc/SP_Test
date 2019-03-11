@@ -15,16 +15,18 @@ class OfficesService: NSObject {
     
     static let shared = OfficesService()
     
+    let geolocateOperationQueue: OperationQueue = OperationQueue()
+    
     var urlString: String {
         get {
             return APIController.shared.baseUrl + APIRoute.offices.rawValue
         }
     }
     
-    func getOffices(clinicianId: Int, serviceCodeId: Int, completion: @escaping (([Office]?) -> Void), failure: @escaping ((Error) -> Void)) {
+    func getOffices(clinicianId: Int, serviceCodeId: Int, completion: (([Office]?) -> Void)?, failure: @escaping ((Error) -> Void)) {
         
         guard let url = URL(string: urlString) else {
-            completion(nil)
+            completion?(nil)
             return
         }
         
@@ -35,56 +37,49 @@ class OfficesService: NSObject {
         
         let managedObjectContext = CoreDataController.shared.persistentContainer.viewContext
         let decoder = JSONDecoder()
-        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext") else {
+        guard let kCodingUserInfoKeyManagedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext"),
+            let kCodingUserInfoKeyServiceCodeId = CodingUserInfoKey(rawValue: "cptCodeId") else {
             fatalError()
         }
+        decoder.userInfo[kCodingUserInfoKeyServiceCodeId] = serviceCodeId
         decoder.userInfo[kCodingUserInfoKeyManagedObjectContext] = managedObjectContext
         decoder.dateDecodingStrategy = .secondsSince1970
         let japxDecoder = JapxDecoder(jsonDecoder: decoder)
         
+        let queue = DispatchQueue(label: EntityName.office.rawValue)
         Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding(destination: .queryString), headers: APIController.shared.headers)
             .validate()
-            .responseCodableJSONAPI(queue: nil, includeList: nil, keyPath: "data", decoder: japxDecoder) { (response: DataResponse<[Office]>) in
+            .responseCodableJSONAPI(queue: queue, includeList: nil, keyPath: "data", decoder: japxDecoder) { (response: DataResponse<[Office]>) in
                 
-                debugPrint(response)
+//                debugPrint(response)
                 
                 if response.result.isSuccess {
-                    var completionCount = 0
-                    if var offices = response.result.value {
-                        var officeCount = offices.count
-                        for i in 0..<offices.count {
-                            guard let street = offices[i].street,
-                                let city = offices[i].city,
-                                let state = offices[i].state,
-                                let zip = offices[i].zip else {
-                                completionCount += 1
-                                return
+                    if let offices = response.result.value {
+                        CoreDataController.shared.save(context: managedObjectContext)
+                        
+                        var ops: [Operation] = []
+                        _ = offices.map { office in
+                            if office.geolocation == nil {
+                                let op = GeolocateOperation(office: office) as Operation
+                                ops.append(op)
                             }
-                            let addressStr = "\(street) \(city) \(state) \(zip)"
-                            let geocoder = CLGeocoder()
-                            geocoder.geocodeAddressString(addressStr, completionHandler: { (placemarks, error) in
-                                defer {
-                                    if completionCount == officeCount {
-                                        try! managedObjectContext.save()
-                                        completion(offices)
-                                    }
-                                }
-                                completionCount += 1
-                                guard error == nil else {
-                                    print("geocode error: \(String(describing: error))")
-                                    return
-                                }
-                                if let firstPlacemark = placemarks?.first,
-                                    let location = firstPlacemark.location {
-                                    offices[i].geoLocation = GeoLocation(location: location)
-                                }
-                            })
+                        }
+                        self.geolocateOperationQueue.addOperations(ops, waitUntilFinished: true)
+                        
+                        DispatchQueue.main.async {
+                            completion?(offices)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion?(nil)
                         }
                     }
                 }
                 if response.result.isFailure {
                     let error : Error = response.result.error!
-                    failure(error)
+                    DispatchQueue.main.async {
+                        failure(error)
+                    }
                 }
         }
     

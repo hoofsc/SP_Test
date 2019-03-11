@@ -22,19 +22,6 @@ public class ServiceCode: NSManagedObject, Codable {
         case callToBook
     }
     
-    class func fetch(oid: String, in context: NSManagedObjectContext) -> ServiceCode? {
-        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.serviceCode.rawValue)
-        fetchRequest.predicate = NSPredicate(format: "oid == %@", oid)
-        do {
-            if let fetchedArr = try context.fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as? [ServiceCode] {
-                return fetchedArr.first
-            }
-        } catch {
-            fatalError("Failed to fetch serviceCodes: \(error)")
-        }
-        return nil
-    }
-    
     // MARK: - Decodable
     required convenience public init(from decoder: Decoder) throws {
         guard let codingUserInfoKeyManagedObjectContext = CodingUserInfoKey.managedObjectContext,
@@ -52,16 +39,24 @@ public class ServiceCode: NSManagedObject, Codable {
         self.rate = try! Float(container.decodeIfPresent(String.self, forKey: .rate)!)!
         self.callToBook = try! container.decodeIfPresent(String.self, forKey: .callToBook)! == "true" ? true : false
         
-        if let fetched = ServiceCode.fetch(oid: self.oid!, in: managedObjectContext) {
-            fetched.type = type
-            fetched.desc = desc
-            fetched.duration = duration
-            fetched.rate = rate
-            fetched.callToBook = callToBook
-        } else {
-            managedObjectContext.insert(self)
+        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.serviceCode.rawValue)
+        fetchRequest.predicate = NSPredicate(format: "oid == %@", self.oid!)
+        do {
+            
+            if let fetchedArr = try managedObjectContext.fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as? [ServiceCode] {
+                if let fetched = fetchedArr.first {
+                    fetched.type = type
+                    fetched.desc = desc
+                    fetched.duration = duration
+                    fetched.rate = rate
+                    fetched.callToBook = callToBook
+                } else {
+                    managedObjectContext.insert(self)
+                }
+            }
+        } catch {
+            fatalError("Failed to fetch serviceCodes: \(error)")
         }
-        
     }
     
     // MARK: - Encodable

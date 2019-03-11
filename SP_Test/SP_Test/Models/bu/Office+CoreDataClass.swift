@@ -13,7 +13,10 @@ import CoreLocation
 
 @objc(Office)
 public class Office: NSManagedObject, Codable {
-        
+    
+    //computed
+    var geoLocation: GeoLocation?
+    
     enum CodingKeys: String, CodingKey {
         case oid = "id"
         case type
@@ -24,29 +27,12 @@ public class Office: NSManagedObject, Codable {
         case zip
         case phone
         case isVideo
-        case geolocation
-        case formattedAddress
-    }
-    
-    class func fetch(oid: String, in context: NSManagedObjectContext) -> Office? {
-        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.office.rawValue)
-        fetchRequest.predicate = NSPredicate(format: "oid == %@", oid)
-        do {
-            if let fetchedArr = try context.fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as? [Office] {
-                return fetchedArr.first
-            }
-        } catch {
-            fatalError("Failed to fetch Offices: \(error)")
-        }
-        return nil
     }
     
     // MARK: - Decodable
     required convenience public init(from decoder: Decoder) throws {
         guard let codingUserInfoKeyManagedObjectContext = CodingUserInfoKey.managedObjectContext,
             let managedObjectContext = decoder.userInfo[codingUserInfoKeyManagedObjectContext] as? NSManagedObjectContext,
-            let codingUserInfoKeyServiceCodeId = CodingUserInfoKey.cptCodeId,
-            let serviceCodeId = decoder.userInfo[codingUserInfoKeyServiceCodeId] as? Int,
             let entity = NSEntityDescription.entity(forEntityName: EntityName.office.rawValue, in: managedObjectContext) else {
                 fatalError("Failed to decode \(EntityName.office.rawValue)")
         }
@@ -62,38 +48,32 @@ public class Office: NSManagedObject, Codable {
         self.zip = try! container.decodeIfPresent(String.self, forKey: .zip)!
         self.phone = try! container.decodeIfPresent(String.self, forKey: .phone)!
         self.isVideo = try! container.decodeIfPresent(Bool.self, forKey: .isVideo)!
-        guard let street = self.street,
-            let city = self.city,
-            let state = self.state,
-            let zip = self.zip else {
-                return
-        }
-        self.formattedAddress = "\(street) \(city) \(state) \(zip)"
         
-        if let relatedService = ServiceCode.fetch(oid: String(serviceCodeId), in: managedObjectContext) {
-            self.addToServiceCodes(relatedService)
+        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.office.rawValue)
+        fetchRequest.predicate = NSPredicate(format: "oid == %@", self.oid!)
+        do {
             
-            if let fetched = Office.fetch(oid: self.oid!, in: managedObjectContext) {
-                fetched.type = type
-                fetched.name = name
-                fetched.street = street
-                fetched.city = city
-                fetched.state = state
-                fetched.zip = zip
-                fetched.phone = phone
-                fetched.isVideo = isVideo
-                fetched.serviceCodes = self.serviceCodes
-                if fetched.formattedAddress != formattedAddress {
-                    // perform a new geolocation update operation
-                    fetched.formattedAddress = formattedAddress
-                    let op = GeolocateOperation(office: fetched) as Operation
-                    op.start()
+            if let fetchedArr = try managedObjectContext.fetch(fetchRequest as! NSFetchRequest<NSFetchRequestResult>) as? [Office] {
+                print("off fetched count:")
+                print(fetchedArr.count)
+                if let fetched = fetchedArr.first {
+                    fetched.type = type
+                    fetched.name = name
+                    fetched.street = street
+                    fetched.city = city
+                    fetched.state = state
+                    fetched.zip = zip
+                    fetched.phone = phone
+                    fetched.isVideo = isVideo
+                    print(fetched)
+                } else {
+                    managedObjectContext.insert(self)
                 }
-            } else {
-                managedObjectContext.insert(self)
             }
+        } catch {
+            fatalError("Failed to fetch serviceCodes: \(error)")
         }
-       
+        
     }
     
     // MARK: - Encodable
@@ -108,7 +88,6 @@ public class Office: NSManagedObject, Codable {
         try container.encode(zip, forKey: .zip)
         try container.encode(phone, forKey: .phone)
         try container.encode(isVideo, forKey: .isVideo)
-        try container.encode(self.geolocation, forKey: .geolocation)
     }
 }
 

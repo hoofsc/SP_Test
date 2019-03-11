@@ -36,16 +36,14 @@ class OfficeCollectionViewCell: UICollectionViewCell {
             cityStateZipLabel.text = "\(city), \(state) \(zip)"
             phoneLabel.text = phone
             
-            if let geoLocation = office!.geoLocation {
+            if let geoLocation = office!.geolocation {
                 let coordinate = geoLocation.location.coordinate
                 let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: CLLocationDistance(exactly: kMapRegionDistance)!, longitudinalMeters: CLLocationDistance(exactly: kMapRegionDistance)!)
                 mapView.setRegion(mapView.regionThatFits(region), animated: false)
                 let anno = MKPointAnnotation()
                 anno.coordinate = coordinate
                 mapView.addAnnotation(anno)
-            } else {
-                print("geolocation not found")
-            }
+            } 
         }
     }
     

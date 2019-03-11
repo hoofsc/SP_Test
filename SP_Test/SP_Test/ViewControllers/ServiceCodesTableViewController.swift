@@ -7,24 +7,38 @@
 //
 
 import UIKit
+import CoreData
 
 private let reuseIdentifier = "ServiceCodeTableViewCell"
 
-class ServiceCodesTableViewController: UITableViewController {
-
+class ServiceCodesTableViewController: UITableViewController, FetchedResultsControllerProtocol {
+    
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
+    var blockOperations: [BlockOperation]?
+    
     var clinicianId: Int = 2
-    var serviceCodes = [ServiceCode]() {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ServiceCodesService.shared.getServiceCodes(clinicianId: clinicianId, completion: { serviceCodes in
-            self.serviceCodes = serviceCodes!
-        }) { error in
+        let fetchRequest = NSFetchRequest<ServiceCode>(entityName: EntityName.serviceCode.rawValue)
+        let sortDescriptor = NSSortDescriptor(key: "oid", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        let context = CoreDataController.shared.persistentContainer.viewContext
+        fetchedResultsController = NSFetchedResultsController<NSFetchRequestResult>(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch let error {
+            print("FETCH ERROR: \(error)")
+        }
+
+        fetchData()
+    }
+    
+    func fetchData() {
+        ServiceCodesService.shared.getServiceCodes(clinicianId: clinicianId, completion: nil) { error in
             print("error: \(String(describing: error))")
         }
     }
@@ -38,14 +52,20 @@ class ServiceCodesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return serviceCodes.count
+        guard let sections = fetchedResultsController?.sections else {
+            return 0
+        }
+        /*get number of rows count for each section*/
+        let sectionInfo = sections[section]
+        return sectionInfo.numberOfObjects
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ServiceCodeTableViewCell
 
         // Configure the cell...
-        cell.serviceCode = serviceCodes[indexPath.row]
+        let code = fetchedResultsController?.object(at: indexPath) as? ServiceCode
+        cell.serviceCode = code
         
         return cell
     }
@@ -65,4 +85,51 @@ class ServiceCodesTableViewController: UITableViewController {
         }
     }
 
+}
+
+extension ServiceCodesTableViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    /*This delegate method will be called second. This method will give information about what operation exactly started taking place a insert, a update, a delete or a move. The enum NSFetchedResultsChangeType will provide the change types.
+     public enum NSFetchedResultsChangeType : UInt {
+         case insert
+         case delete
+         case move
+         case update
+     }
+     
+     */
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+            case .insert:
+                if let indexPath = newIndexPath {
+                    tableView.insertRows(at: [indexPath], with: .fade)
+                }
+            case .delete:
+                if let indexPath = indexPath {
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+            case .update:
+                if let indexPath = indexPath,
+                    let cell = tableView.cellForRow(at: indexPath) as? ServiceCodeTableViewCell,
+                    let serviceCode = fetchedResultsController?.object(at: indexPath) as? ServiceCode {
+                    cell.serviceCode = serviceCode
+            }
+            case .move:
+                if let indexPath = indexPath {
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+                if let newIndexPath = newIndexPath {
+                    tableView.insertRows(at: [newIndexPath], with: .fade)
+                }
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
 }
